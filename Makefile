@@ -8,7 +8,7 @@ IDF_PATH := $(POCKETSPRITE_PATH)/esp-idf
 
 PROJECT_NAME := chooser
 
-COMPONENTS := 8bkc-hal app_update appfs aws_iot bootloader bootloader_support bt console \
+COMPONENTS := 8bkc-hal sndmixer app_update appfs aws_iot bootloader bootloader_support bt console \
 cxx driver esp32 esptool_py freertos gui-util heap micro-ecc\
 libesphttpd log lwip main mbedtls mkappfs newlib nvs_flash app_trace\
 partition_table soc spi_flash tcpip_adapter ugui ulp vfs wpa_supplicant \

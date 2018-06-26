@@ -18,6 +18,13 @@ static const uint8_t gfx[]={
 #include "graphics.inc"
 };
 
+static const uint8_t bmoGFX[]={
+#include "bmo.inc"
+};
+
+#define BMO_W 80
+#define BMO_H 64
+
 #define GFX_W 41
 #define GFX_H 33
 #define GFX_IH 11
@@ -32,6 +39,16 @@ void drawIcon(int px, int py, int o) {
 	const uint8_t *p=&gfx[o*GFX_IH*GFX_W*4];
 	for (int y=0; y<GFX_IH; y++) {
 		for (int x=0; x<GFX_W; x++) {
+			UG_DrawPixel(x+px, y+py, kchal_ugui_rgb(p[0],p[1],p[2]));
+			p+=4;
+		}
+	}
+}
+
+void drawBMO(int px, int py, int o) {
+	const uint8_t *p=&bmoGFX[o*BMO_H*BMO_W*4];
+	for (int y=0; y<BMO_H; y++) {
+		for (int x=0; x<BMO_W; x++) {
 			UG_DrawPixel(x+px, y+py, kchal_ugui_rgb(p[0],p[1],p[2]));
 			p+=4;
 		}
@@ -81,19 +98,12 @@ void guiInit() {
 		UG_PutString(0, 16, "GO TO:");
 		UG_SetForecolor(C_YELLOW);
 		UG_PutString(0, 24, "HTTP://192.168.4.1/");
-	} else {
-		UG_SetForecolor(C_WHITE);
-		UG_PutString(0, 0, "   NOTE:");
-		UG_SetForecolor(C_YELLOW);
-		UG_PutString(0, 8,  "WiFi is off");
-		UG_PutString(0, 16, "and can be ");
-		UG_PutString(0, 24, "enabled in ");
-		UG_PutString(0, 32, "the options");
-		UG_PutString(0, 40, "menu.      ");
-	}
 	UG_SetForecolor(C_RED);
 	UG_PutString(30, 56, "MENU");
 	UG_SetBackcolor(C_BLACK);
+	} else {
+		drawBMO(0, 0, 0);
+	}
 
 	kcugui_flush();
 }
