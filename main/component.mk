@@ -26,3 +26,6 @@ bmo.inc: $(COMPONENT_PATH)/bmo.xcf
 	convert $^ -background none -layers flatten bmo.rgba
 	#convert $^ -background none -layers flatten -crop 80x192+0+0 graphics.png
 	cat bmo.rgba | xxd -i > bmo.inc
+
+# The wave files get embedded as binary files.
+COMPONENT_EMBED_FILES := videogames.wav

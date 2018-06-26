@@ -51,11 +51,15 @@ some pictures of cats.
 #include "8bkc-hal.h"
 #include "8bkc-ugui.h"
 #include "8bkcgui-widgets.h"
+#include "sndmixer.h"
 
 #include "gui.h"
 #include "ugui.h"
 #include "esp_log.h"
 #include "fnmatch.h"
+
+extern const uint8_t videogames_wav_start[]   asm("_binary_videogames_wav_start");
+extern const uint8_t videogames_wav_end[]     asm("_binary_videogames_wav_end");
 
 esp_err_t event_handler(void *ctx, system_event_t *event)
 {
@@ -289,6 +293,10 @@ int app_main(void)
 
 	espFsInit((void*)(webpages_espfs_start));
 	httpdInit(builtInUrls, 80);
+
+	sndmixer_init(1, 22050); //Initialize sound mixer. 1 channel at 22050Hz sample rate.
+	int id=sndmixer_queue_wav(videogames_wav_start, videogames_wav_end, 1);
+	sndmixer_play(id);
 
 	guiInit();
 
