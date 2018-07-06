@@ -295,6 +295,8 @@ int app_main(void)
 	httpdInit(builtInUrls, 80);
 
 	guiInit();
+	
+	guiMain();
 
 	printf("\nReady, AP on channel %d\n", (int)channel);
 

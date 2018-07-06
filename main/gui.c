@@ -83,6 +83,10 @@ void guiBatEmpty() {
 
 void guiInit() {
 	kcugui_init();
+	kcugui_flush();
+}
+
+void guiMain() {
 	uint8_t wifi_en=1;
 	nvs_handle nvsHandle=NULL;
 	esp_err_t r=nvs_open("8bkc", NVS_READONLY, &nvsHandle);

@@ -8,6 +8,8 @@ void guiBatEmpty();
 
 void guiInit();
 
+void guiMain();
+
 void guiMenu();
 
 #endif
