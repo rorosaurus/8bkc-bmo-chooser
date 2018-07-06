@@ -2,7 +2,7 @@
 
 The first thing you see when you start your PocketSprite is the chooser. It's main tasks are to allow you to upload/delete files (including apps) via WiFi Access Point and launch apps that are present on the filesystem.
 
-This is a modified version of the `chooser.app`, which greets you with a BMO smile when you launch it (with wifi disabled).
+This is a modified version of the `chooser.app`, which greets you with a smiling BMO face and a short sound clip when you launch it (with wifi disabled).
 
 ![Hello!  I am BMO!](bmo.png)
 
@@ -12,7 +12,6 @@ This is a modified version of the `chooser.app`, which greets you with a BMO smi
 3. Follow the [normal app installation instructions](https://pocketsprite.com/pages/faq#functionality)
 
 ## Future goals
-* Add a small sound byte: "Who wants to play *videogames*?!"
 * Reduce filesize further
   * Draw the eyes/mouth separately
 * Some light "animation"
