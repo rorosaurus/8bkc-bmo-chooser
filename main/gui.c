@@ -7,6 +7,7 @@
 #include "8bkc-hal.h"
 #include "8bkc-ugui.h"
 #include "appfs.h"
+#include "sndmixer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
@@ -34,6 +35,8 @@ static const uint8_t bmoGFX[]={
 #define GFX_O_CHG 2
 #define GFX_O_CHGNEARFULL 3
 
+extern const uint8_t videogames_wav_start[]   asm("_binary_videogames_wav_start");
+extern const uint8_t videogames_wav_end[]     asm("_binary_videogames_wav_end");
 
 void drawIcon(int px, int py, int o) {
 	const uint8_t *p=&gfx[o*GFX_IH*GFX_W*4];
@@ -102,6 +105,10 @@ void guiInit() {
 	UG_PutString(30, 56, "MENU");
 	UG_SetBackcolor(C_BLACK);
 	} else {
+		sndmixer_init(1, 8000); //Initialize sound mixer. 1 channel at 22050Hz sample rate.
+		int id=sndmixer_queue_wav(videogames_wav_start, videogames_wav_end, 0);
+		sndmixer_play(id);
+		
 		drawBMO(0, 0, 0);
 	}
 
