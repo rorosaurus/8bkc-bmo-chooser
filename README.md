@@ -5,6 +5,7 @@ The first thing you see when you start your PocketSprite is the chooser. It's ma
 This is a modified version of the `chooser.app`, which greets you with a smiling BMO face and a short sound clip when you launch it (with wifi disabled).
 
 ![Hello!  I am BMO!](bmo.png)
+> Who wants to play *videogaaaames*!?
 
 ## Installing
 1. Download the [latest version from GitHub](https://github.com/rorosaurus/8bkc-bmo-chooser/releases/latest)
