@@ -38,6 +38,36 @@ void drawIcon(int px, int py, int o) {
 	}
 }
 
+static void renderGfx(uint16_t *ovl, int dx, int dy, int sx, int sy, int sw, int sh) {
+	//uint32_t *gfx=(uint32_t*)graphics;
+	int x, y, i;
+	if (dx<0) {
+		sx-=dx;
+		sw+=dx;
+		dx=0;
+	}
+	if ((dx+sw)>80) {
+		sw-=((dx+sw)-80);
+		dx=80-sw;
+	}
+	if (dy<0) {
+		sy-=dy;
+		sh+=dy;
+		dy=0;
+	}
+	if ((dy+sh)>64) {
+		sh-=((dy+sh)-64);
+		dy=64-sh;
+	}
+
+	for (y=0; y<sh; y++) {
+		for (x=0; x<sw; x++) {
+			i=gfx[(sy+y)*80+(sx+x)];
+			if (i&0x80000000) ovl[(dy+y)*80+(dx+x)]=kchal_fbval_rgb((i>>0)&0xff, (i>>8)&0xff, (i>>16)&0xff);
+		}
+	}
+}
+
 
 void guiCharging(int almostFull) {
 	kcugui_cls();
@@ -274,7 +304,24 @@ int app_select_filter_fn(const char *name, void *filterarg) {
 void guiMenu() {
 	//Wait till all buttons are released, and then until one button is pressed to go into the menu.
 	while (kchal_get_keys()) vTaskDelay(100/portTICK_RATE_MS);
-	while (!kchal_get_keys()) vTaskDelay(100/portTICK_RATE_MS);
+	while (!kchal_get_keys()) {
+		uint16_t *fb = kcugui_get_fb();
+		// draw empty battery cell
+		renderGfx(fb, KC_SCREEN_W-16, 0, 0, 44, 16, 7);
+		
+		// fill in the battery with appropriate color
+		int batPct = kchal_get_bat_pct();
+		if (batPct < 20) renderGfx(fb, KC_SCREEN_W-15, 1, 17, 45, (batPct*12)/100, 5);
+		else if (batPct < 50) renderGfx(fb, KC_SCREEN_W-15, 1, 0, 52, (batPct*12)/100, 5);
+		else renderGfx(fb, KC_SCREEN_W-15, 1, 17, 52, (batPct*12)/100, 5);
+		
+		// add lightning bolt icon if applicable
+		if (kchal_get_chg_status() > 0) {
+			renderGfx(fb, KC_SCREEN_W-11, 0, 33, 44, 6, 8);
+		}
+		
+		vTaskDelay(100/portTICK_RATE_MS);
+	}
 	int fd=kcugui_filechooser_filter(app_select_filter_fn, "*.app,*.bin", "CHOOSE APP", fccallback, NULL, KCUGUI_FILE_FLAGS_NOEXT);
 	while(kchal_get_keys()); //wait till btn released
 	kchal_set_new_app(fd);
