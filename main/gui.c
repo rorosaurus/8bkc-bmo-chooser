@@ -87,6 +87,26 @@ void drawBatteryIcon() {
 			}
 		}
 	}
+
+	// print out info
+	char buf[32];
+	UG_FontSelect(&FONT_6X8);
+	UG_SetForecolor(C_WHITE);
+	
+	int v = kchal_get_bat_mv();
+	sprintf(buf, "VBATMV:%d", v);
+	UG_PutString(0, 16, buf);
+
+	int vs = kchal_get_stable_bat_mv();
+	sprintf(buf, "STABLE:%d", vs);
+	UG_PutString(0, 24, buf);
+
+	sprintf(buf, "OLD_PCT:%d", b);
+	UG_PutString(0, 40, buf);
+
+	int newPct = kchal_get_new_bat_pct();
+	sprintf(buf, "NEW_PCT:%d", newPct);
+	UG_PutString(0, 48, buf);
 }
 
 void guiFull() {
@@ -316,13 +336,9 @@ int app_select_filter_fn(const char *name, void *filterarg) {
 void guiMenu() {
 	//Wait till all buttons are released, and then until one button is pressed to go into the menu.
 	while (kchal_get_keys()) vTaskDelay(100/portTICK_RATE_MS);
-	int oldChgStatus = kchal_get_chg_status();
 	while (!kchal_get_keys()) {
-		if (oldChgStatus != kchal_get_chg_status()) { // update the battery icon charge status changes
-			drawBatteryIcon();
-			oldChgStatus = kchal_get_chg_status();
-			kcugui_flush();
-		}
+		drawBatteryIcon();
+		kcugui_flush();
 		vTaskDelay(100/portTICK_RATE_MS);
 	}
 	int fd=kcugui_filechooser_filter(app_select_filter_fn, "*.app,*.bin", "CHOOSE APP", fccallback, NULL, KCUGUI_FILE_FLAGS_NOEXT);
